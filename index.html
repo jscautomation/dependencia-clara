@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nueva Ley de Dependencia 2026: qué os corresponde | Comprobador gratis</title>
 <meta name="description" content="Responde unas preguntas y descubre qué podéis pedir con la Ley 4/2026 de dependencia, en vigor el 23 de octubre de 2026: plazos, prestación por cuidados en casa, teleasistencia, PIA y más. Gratis y sin registro.">
+<link rel="canonical" href="https://jscautomation.github.io/dependencia-clara/">
+<meta property="og:url" content="https://jscautomation.github.io/dependencia-clara/">
 <meta property="og:title" content="Qué os corresponde con la nueva Ley de Dependencia">
 <meta property="og:description" content="Comprobador gratuito: qué podéis pedir desde el 23 de octubre de 2026, con el artículo de la ley al lado.">
 <meta property="og:type" content="website">
@@ -227,9 +229,9 @@ footer p{margin:0 0 10px}
 /* ===== Configuración ===== */
 const CONFIG = {
   CONTACT_EMAIL: "jorge@jscautomation.es", // cámbialo por el correo del proyecto
-  STRIPE_LINK: "",                         // pega aquí el enlace de pago de Stripe cuando exista
+  STRIPE_LINK: "https://buy.stripe.com/test_eVq7sN3Z8eR63F37Fj3ZK00", // enlace de MODO DE PRUEBA: cámbialo por el real al activar Stripe
   KIT_PRICE: "29 €",
-  KIT_READY_BY: "el 30 de octubre"
+  KIT_READY_BY: "el 30 de octubre de 2026"
 };
 const ENTRY_INTO_FORCE = new Date(2026, 9, 23); // 23 de octubre de 2026
 
@@ -352,8 +354,9 @@ let current=0;
 const visible=()=>STEPS.filter(s=>s.show());
 function renderStep(){
   const steps=visible(); const s=steps[current];
-  document.getElementById("progress").innerHTML=steps.map((_,i)=>`<i class="${i<=current?"on":""}"></i>`).join("");
-  document.getElementById("stepCount").textContent=`Pregunta ${current+1} de ${steps.length}`;
+  const total=state.estado?steps.length:6; // antes de saber el trámite, se muestra el máximo
+  document.getElementById("progress").innerHTML=Array.from({length:total},(_,i)=>`<i class="${i<=current?"on":""}"></i>`).join("");
+  document.getElementById("stepCount").textContent=`Pregunta ${current+1} de ${total}`;
   document.getElementById("stepBody").innerHTML=s.render();
   document.getElementById("stepError").textContent="";
   document.getElementById("backBtn").style.visibility=current===0?"hidden":"visible";
@@ -556,7 +559,7 @@ function showResults(){
       <ul>${kitItems.map(i=>`<li>${esc(i.t)}</li>`).join("")}</ul>
       <p class="price">${CONFIG.KIT_PRICE}</p>
       <a class="btn" href="${esc(reserveHref)}" id="reserveBtn">${CONFIG.STRIPE_LINK?"Comprar el kit":"Reservar el kit"}</a>
-      <small>${CONFIG.STRIPE_LINK?"Pago único y seguro con Stripe.":`No pagáis nada ahora. Os escribimos cuando esté listo, antes de ${CONFIG.KIT_READY_BY}.`}</small>
+      <small>${CONFIG.STRIPE_LINK?`Pago único y seguro con Stripe. Os enviamos los escritos por email, como tarde ${CONFIG.KIT_READY_BY}.`:`No pagáis nada ahora. Os escribimos cuando esté listo, antes de ${CONFIG.KIT_READY_BY}.`}</small>
     </div>`:""}
     ${infos.length?`<h3 class="info-title">También os interesa saber</h3><ul class="items">${infos.map(itemHTML).join("")}</ul>`:""}
     <div class="actions">
